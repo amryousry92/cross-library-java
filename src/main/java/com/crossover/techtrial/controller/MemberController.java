@@ -75,9 +75,8 @@ public class MemberController {
      * Your Implementation Here. 
      * 
      */
-    
+    topDrivers = memberService.findTopMembers(startTime, endTime);
     return ResponseEntity.ok(topDrivers);
-    
   }
   
 }

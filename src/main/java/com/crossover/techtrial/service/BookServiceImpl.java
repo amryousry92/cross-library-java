@@ -33,8 +33,8 @@ public class BookServiceImpl implements BookService{
     
   }
   
-  public Book save(Book p) {
-    return bookRepository.save(p);
+  public Book save(Book book) {
+    return bookRepository.save(book);
   }
 
   @Override
