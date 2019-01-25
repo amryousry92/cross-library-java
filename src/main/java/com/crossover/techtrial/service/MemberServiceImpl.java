@@ -4,13 +4,14 @@
 package com.crossover.techtrial.service;
 
 import com.crossover.techtrial.dto.TopMemberDTO;
+import com.crossover.techtrial.model.Member;
+import com.crossover.techtrial.repositories.MemberRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.crossover.techtrial.model.Member;
-import com.crossover.techtrial.repositories.MemberRepository;
 
 /**
  * @author crossover
@@ -43,4 +44,8 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findTopMembers(startTime, endTime);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        memberRepository.deleteById(id);
+    }
 }

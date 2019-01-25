@@ -23,4 +23,5 @@ public interface MemberService {
 
     public List<TopMemberDTO> findTopMembers(LocalDateTime startTime, LocalDateTime endTime);
 
+    void deleteById(Long id);
 }

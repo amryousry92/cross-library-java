@@ -3,6 +3,7 @@
  */
 package com.crossover.techtrial.model;
 
+import com.crossover.techtrial.validation.MemberNameConstraint;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -29,6 +30,7 @@ public class Member implements Serializable{
   Long id;
 
   @Column(name = "name")
+  @MemberNameConstraint
   String name;
 
   @Column(name = "email")

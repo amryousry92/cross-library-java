@@ -21,7 +21,7 @@ import com.crossover.techtrial.model.Member;
 @RestResource(exported = false)
 public interface MemberRepository extends PagingAndSortingRepository<Member, Long> {
 
-    static final String TOP_MEMBERS_QUERY =
+    String TOP_MEMBERS_QUERY =
         "Select member.name, Count(transaction.member_id) as total "
             + "From member left join transaction on member.id = transaction.member_id  "
             + "Where transaction.date_of_issue BETWEEN (:startTime) AND (:endTime) "
@@ -34,7 +34,7 @@ public interface MemberRepository extends PagingAndSortingRepository<Member, Lon
 
     List<Member> findAll();
 
-    @Query(TOP_MEMBERS_QUERY)
+    @Query(value = TOP_MEMBERS_QUERY, nativeQuery = true)
     List<TopMemberDTO> findTopMembers(@Param("startTime") LocalDateTime startTime,
         @Param("endTime") LocalDateTime endTime);
 }
