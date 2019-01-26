@@ -8,7 +8,6 @@ import com.crossover.techtrial.model.Transaction;
 import com.crossover.techtrial.service.BookService;
 import com.crossover.techtrial.service.MemberService;
 import com.crossover.techtrial.service.TransactionService;
-import java.time.LocalDateTime;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,6 @@ public class TransactionController {
 
     @Autowired
     TransactionService transactionService;
-
-    @Autowired
-    BookService bookService;
-
-    @Autowired
-    MemberService memberService;
 
     /*
      * PLEASE DO NOT CHANGE SIGNATURE OR METHOD TYPE OF END POINTS

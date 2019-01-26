@@ -65,10 +65,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction issueBook(Long bookId, Long memberId) throws TransactionException {
+
         final Transaction transaction = new Transaction();
         transaction.setBook(bookService.findById(bookId));
         transaction.setMember(memberService.findById(memberId));
         transaction.setDateOfIssue(LocalDateTime.now());
-        return transactionRepository.save(transaction);
+        return save(transaction);
     }
 }

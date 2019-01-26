@@ -37,7 +37,7 @@ public class MemberControllerTest {
     private static final String INVALID_HTTP_REGISTER_REQUEST =
         "{\"name\": \"1test 1\", \"email\": \"test10000000000001@gmail.com\","
             + " \"membershipStatus\": \"ACTIVE\",\"membershipStartDate\":\"2018-08-08T12:12:12\" }";
-    private static final String API_MEMBER_URL = "/api/member";
+    static final String API_MEMBER_URL = "/api/member";
 
     private MockMvc mockMvc;
 
@@ -48,7 +48,7 @@ public class MemberControllerTest {
     private TestRestTemplate template;
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @Before
     public void setup() throws Exception {
@@ -69,7 +69,7 @@ public class MemberControllerTest {
         memberService.deleteById(response.getBody().getId());
     }
 
-    private HttpEntity<Object> getHttpEntity(Object body) {
+    static HttpEntity<Object> getHttpEntity(Object body) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(body, headers);
