@@ -3,7 +3,10 @@
  */
 package com.crossover.techtrial.controller;
 
+import com.crossover.techtrial.exception.TransactionException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,8 @@ import com.crossover.techtrial.service.BookService;
  */
 @RestController
 public class BookController {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Autowired
     private BookService bookService;
@@ -47,11 +52,13 @@ public class BookController {
     @GetMapping(path = "/api/book/{book-id}")
     public ResponseEntity<Book> getRideById(
         @PathVariable(name = "book-id", required = true) Long bookId) {
-        Book book = bookService.findById(bookId);
-        if (book != null) {
+        try {
+            Book book = bookService.findById(bookId);
             return ResponseEntity.ok(book);
+        } catch (TransactionException exception) {
+            logger.error(exception.getMessage());
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
 

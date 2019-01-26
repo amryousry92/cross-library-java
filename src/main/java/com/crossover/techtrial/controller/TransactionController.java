@@ -3,17 +3,17 @@
  */
 package com.crossover.techtrial.controller;
 
+import com.crossover.techtrial.exception.TransactionException;
 import com.crossover.techtrial.model.Transaction;
 import com.crossover.techtrial.service.BookService;
 import com.crossover.techtrial.service.MemberService;
 import com.crossover.techtrial.service.TransactionService;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class TransactionController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
     TransactionService transactionService;
@@ -44,15 +46,12 @@ public class TransactionController {
 
         Long bookId = params.get("bookId");
         Long memberId = params.get("memberId");
-        List<Transaction> previousTransactions = transactionService.findByMemberId(memberId);
-        if (!CollectionUtils.isEmpty(previousTransactions) && previousTransactions.size() >= 5) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        try {
+            return ResponseEntity.ok().body(transactionService.issueBook(bookId, memberId));
+        } catch (TransactionException exception) {
+            logger.error(exception.getMessage());
+            return ResponseEntity.status(exception.getStatus()).build();
         }
-        Transaction transaction = new Transaction();
-        transaction.setBook(bookService.findById(bookId));
-        transaction.setMember(memberService.findById(memberId));
-        transaction.setDateOfIssue(LocalDateTime.now());
-        return ResponseEntity.ok().body(transactionService.save(transaction));
     }
 
     /*
@@ -61,12 +60,11 @@ public class TransactionController {
     @PatchMapping(path = "/api/transaction/{transaction-id}/return")
     public ResponseEntity<Transaction> returnBookTransaction(
         @PathVariable(name = "transaction-id") Long transactionId) {
-        Transaction transaction = transactionService.findById(transactionId);
-        if (transaction != null && transaction.getDateOfReturn() != null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        try {
+            return ResponseEntity.ok().body(transactionService.closeTransaction(transactionId));
+        } catch (TransactionException exception) {
+            logger.error(exception.getMessage());
+            return ResponseEntity.status(exception.getStatus()).build();
         }
-        transaction.setDateOfReturn(LocalDateTime.now());
-        return ResponseEntity.ok().body(transaction);
     }
-
 }

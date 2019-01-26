@@ -33,7 +33,7 @@ public class Member implements Serializable{
   @MemberNameConstraint
   String name;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true)
   String email;
   
   @Enumerated(EnumType.STRING)

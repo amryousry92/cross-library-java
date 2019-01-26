@@ -3,8 +3,8 @@
  */
 package com.crossover.techtrial.controller;
 
+import com.crossover.techtrial.model.Member;
 import com.crossover.techtrial.service.MemberService;
-import java.net.URI;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.crossover.techtrial.model.Member;
 
 /**
  * @author kshah
@@ -54,7 +54,7 @@ public class MemberControllerTest {
     public void setup() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
     }
- 
+
     @Test
     public void testMemberRegsitrationsuccessful() throws Exception {
         final HttpEntity<Object> member = getHttpEntity(VALID_HTTP_REGISTER_REQUEST);
@@ -63,7 +63,7 @@ public class MemberControllerTest {
             API_MEMBER_URL, member, Member.class);
 
         Assert.assertEquals("test 1", response.getBody().getName());
-        Assert.assertEquals(200, response.getStatusCode().value());
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
 
         //cleanup the user
         memberService.deleteById(response.getBody().getId());
@@ -85,7 +85,6 @@ public class MemberControllerTest {
             API_MEMBER_URL, member, Member.class);
 
         // Assert
-        Assert.assertEquals(400, response.getStatusCode().value());
-
+        Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode().value());
     }
 }

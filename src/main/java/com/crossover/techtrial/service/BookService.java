@@ -3,6 +3,7 @@
  */
 package com.crossover.techtrial.service;
 
+import com.crossover.techtrial.exception.TransactionException;
 import java.util.List;
 import com.crossover.techtrial.model.Book;
 
@@ -17,6 +18,6 @@ public interface BookService {
   
   public Book save(Book p);
   
-  public Book findById(Long bookId);
+  public Book findById(Long bookId) throws TransactionException;
   
 }
