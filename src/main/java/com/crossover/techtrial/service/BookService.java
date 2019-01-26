@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package com.crossover.techtrial.service;
 
 import com.crossover.techtrial.exception.TransactionException;
-import java.util.List;
 import com.crossover.techtrial.model.Book;
+import java.util.List;
 
 /**
  * BookService interface for Books.
@@ -13,11 +13,12 @@ import com.crossover.techtrial.model.Book;
  *
  */
 public interface BookService {
-  
-  public List<Book> getAll();
-  
-  public Book save(Book p);
-  
-  public Book findById(Long bookId) throws TransactionException;
-  
+
+    List<Book> getAll();
+
+    Book save(Book p);
+
+    Book findById(Long bookId) throws TransactionException;
+
+    void deleteById(Long id);
 }

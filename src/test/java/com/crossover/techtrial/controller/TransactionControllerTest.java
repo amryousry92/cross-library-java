@@ -21,7 +21,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,9 +31,10 @@ public class TransactionControllerTest {
         "{\"name\": \"name\", \"email\": \"MEMBER_EMAIL\","
             + " \"membershipStatus\": \"ACTIVE\",\"membershipStartDate\":\"2018-08-08T12:12:12\" }";
     private static final String MEMBER_EMAIL_REGEX = "MEMBER_EMAIL";
+    static final String API_TRANSACTION_URL = "/api/transaction";
 
     @Mock
-    private TransactionController controller;
+    private TransactionController transactionController;
 
     @Autowired
     private TestRestTemplate template;
@@ -46,18 +46,18 @@ public class TransactionControllerTest {
 
     @Before
     public void setup() throws Exception {
-        MockMvcBuilders.standaloneSetup(controller).build();
-        prepareDatabase(0);
+        MockMvcBuilders.standaloneSetup(transactionController).build();
+        prepareMembersTable(0);
     }
 
     @After
-    public void finalize() {
+    public void cleanMembersList() {
         for (Long memberId : membersToBeCleaned) {
             memberService.deleteById(memberId);
         }
     }
 
-    private void prepareDatabase(int counter) {
+    private void prepareMembersTable(int counter) {
         final HttpEntity<Object> member = getHttpEntity(VALID_HTTP_REGISTER_REQUEST
             .replace(MEMBER_EMAIL_REGEX, MEMBER_EMAIL_REGEX + Math.random()));
         final ResponseEntity<Member> response = template.postForEntity(
@@ -65,7 +65,7 @@ public class TransactionControllerTest {
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             membersToBeCleaned.add(response.getBody().getId());
         } else if (counter < 5) {
-            prepareDatabase(++counter);
+            prepareMembersTable(++counter);
         } else {
             Assert.fail("Can not create members for testing");
         }

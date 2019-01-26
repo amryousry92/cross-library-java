@@ -50,4 +50,9 @@ public class BookServiceImpl implements BookService {
         return dbPerson.orElse(null);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
 }
